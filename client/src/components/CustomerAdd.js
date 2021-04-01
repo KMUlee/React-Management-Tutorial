@@ -20,7 +20,16 @@ class CustomerAdd extends React.Component {
         this.addCustomer()
             .then((response) => {
                 console.log(response.data);
+                this.props.stateRefresh();
             })
+        this.setState({
+            file: null,
+            userName: '',
+            birthday: '',
+            gender: '',
+            job: '',
+            fileName: ''
+        })
     }
 
     handleFileChange = (e) => {
@@ -32,15 +41,16 @@ class CustomerAdd extends React.Component {
 
     handleValueChange = (e) => {
         let nextState = {};
-        nextState[e.target.name] = e.target.name;
+        nextState[e.target.name] = e.target.value;
         this.setState(nextState);
+        console.log(this.state)
     }
 
     addCustomer = () => {
         const url = "/api/customers";
         const formData = new FormData();
         formData.append('image', this.state.file)
-        formData.append('name', this.state.name)
+        formData.append('name', this.state.userName)
         formData.append('birthday', this.state.birthday)
         formData.append('gender', this.state.gender)
         formData.append('job', this.state.job)
@@ -57,7 +67,7 @@ class CustomerAdd extends React.Component {
             <form onSubmit={this.handleFormSubmit}>
                 <h1>고객추가</h1>
                 프로필이미지: <input type="file" name="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange}/><br/>
-                이름: <input type="text" name="name" value={this.state.userName} onChange={this.handleValueChange}/><br/>
+                이름: <input type="text" name="userName" value={this.state.userName} onChange={this.handleValueChange}/><br/>
                 생년월일: <input type="text" name="birthday" value={this.state.birthday} onChange={this.handleValueChange}/><br/>
                 성별: <input type="text" name="gender" value={this.state.gender} onChange={this.handleValueChange}/><br/>
                 직업: <input type="text" name="job" value={this.state.job} onChange={this.handleValueChange}/><br/>
